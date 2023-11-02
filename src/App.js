@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { Navigate, Route, Routes } from "react-router-dom";
+import Homepage from "./components/homepage";
+import AllProducts from "./components/allproduct";
+import CartPage from "./components/cartpage";
+import ProductDetails from "./components/product-details";
+import PageNotFround from "./components/404";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <section className="container-fluid">
+        <section className="row">
+          <Routes>
+            <Route path="/" element={<Navigate to="/home-page" />} />
+            <Route path="/all-products" element={<AllProducts />} />
+            <Route path="/home-page" element={<Homepage />} />
+            <Route path="/product-details" element={<ProductDetails />} />
+
+            <Route path="/my-cart" element={<CartPage />} />
+            <Route path="*" element={<PageNotFround />} />
+          </Routes>
+        </section>
+      </section>
+    </>
   );
 }
 
