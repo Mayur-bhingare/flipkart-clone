@@ -1,0 +1,6 @@
+json-server
+    dummy-db
+home --> category
+product --> category wise
+prod-details --> single
+add to cart

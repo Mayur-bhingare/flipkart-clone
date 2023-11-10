@@ -1,7 +1,29 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { saveProducts } from "../redux/products.slice";
 const AllProducts = () => {
+  let dispatch = useDispatch();
+  let { id } = useParams();
+  let [searchParams] = useSearchParams();
+
   let navigate = useNavigate();
+  let { products } = useSelector((state) => state.product);
+  let getProductsDetails = async () => {
+    let url = `http://localhost:3004/get-product-list/${id}`;
+    let { data } = await axios.get(url);
+    dispatch(saveProducts(data));
+  };
+  useEffect(() => {
+    getProductsDetails();
+
+    // unmount
+    return () => {
+      dispatch(saveProducts([]));
+    };
+  }, []);
   return (
     <>
       <section>
@@ -122,128 +144,67 @@ const AllProducts = () => {
 
         <div className="container" style={{ marginTop: "60px" }}>
           <div className="py-3">
-            <h5>All Products</h5>
+            <h5 className="text-capitalize">
+              All Products of {searchParams.get("name")}
+            </h5>
           </div>
         </div>
         {/*  */}
 
         {/*  */}
-        <div className="row mb-3" onClick={() => navigate("/product-details")}>
-          <div className="col-md-3">
-            <div className="card size">
-              <img
-                src="https://rukminim1.flixcart.com/image/612/612/kuczmvk0/shopsy-t-shirt/7/j/f/l-mens-xoxo-white-smartees-original-imag7hb3xgfe86nh.jpeg?q=70"
-                className="card-img-top-img"
-                alt="..."
-              />
-              <div className="card-body text-center">
-                <h6 className="product-style">Smartees</h6>
-                <div className="overflow">
-                  <p className="product-name">Men Typography Round Neck </p>
-                </div>
-                <div className="">
-                  <span className="pe-2">₹199</span>
-                  <span className="text-secondary pe-2">
-                    <del>₹199</del>
-                  </span>
-                  <span className="text-success">80% off</span>
-                </div>
-                <div>
-                  <p className="product-sizes">
-                    {" "}
-                    <span className="text-secondary">Size</span>{" "}
-                    <span className="product-sizes-level">M, L, XL</span>{" "}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card size">
-              <img
-                src="https://rukminim1.flixcart.com/image/612/612/kuczmvk0/shopsy-t-shirt/7/j/f/l-mens-xoxo-white-smartees-original-imag7hb3xgfe86nh.jpeg?q=70"
-                className="card-img-top-img"
-                alt="..."
-              />
-              <div className="card-body text-center">
-                <h6 className="product-style">Smartees</h6>
-                <div className="overflow">
-                  <p className="product-name">Men Typography Round Neck </p>
-                </div>
-                <div className="">
-                  <span className="pe-2">₹199</span>
-                  <span className="text-secondary pe-2">
-                    <del>₹199</del>
-                  </span>
-                  <span className="text-success">80% off</span>
-                </div>
-                <div>
-                  <p className="product-sizes">
-                    {" "}
-                    <span className="text-secondary">Size</span>{" "}
-                    <span className="product-sizes-level">M, L, XL</span>{" "}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card size">
-              <img
-                src="https://rukminim1.flixcart.com/image/612/612/kuczmvk0/shopsy-t-shirt/7/j/f/l-mens-xoxo-white-smartees-original-imag7hb3xgfe86nh.jpeg?q=70"
-                className="card-img-top-img"
-                alt="..."
-              />
-              <div className="card-body text-center">
-                <h6 className="product-style">Smartees</h6>
-                <div className="overflow">
-                  <p className="product-name">Men Typography Round Neck </p>
-                </div>
-                <div className="">
-                  <span className="pe-2">₹199</span>
-                  <span className="text-secondary pe-2">
-                    <del>₹199</del>
-                  </span>
-                  <span className="text-success">80% off</span>
-                </div>
-                <div>
-                  <p className="product-sizes">
-                    {" "}
-                    <span className="text-secondary">Size</span>{" "}
-                    <span className="product-sizes-level">M, L, XL</span>{" "}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card size">
-              <img
-                src="https://rukminim1.flixcart.com/image/612/612/kuczmvk0/shopsy-t-shirt/7/j/f/l-mens-xoxo-white-smartees-original-imag7hb3xgfe86nh.jpeg?q=70"
-                className="card-img-top-img"
-                alt="..."
-              />
-              <div className="card-body text-center">
-                <h6 className="product-style">Smartees</h6>
-                <div className="overflow">
-                  <p className="product-name">Men Typography Round Neck </p>
-                </div>
-                <div className="">
-                  <span className="pe-2">₹199</span>
-                  <span className="text-secondary pe-2">
-                    <del>₹199</del>
-                  </span>
-                  <span className="text-success">80% off</span>
-                </div>
-                <div>
-                  <p className="product-sizes">
-                    <span className="text-secondary">Size</span>{" "}
-                    <span className="product-sizes-level">M, L, XL</span>{" "}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="row mb-3">
+          {products.length == 0 ? (
+            <p>Loading....</p>
+          ) : (
+            <>
+              {products.map((product) => {
+                return (
+                  <div
+                    className="col-md-3 mb-3"
+                    title={product.title}
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      navigate(
+                        `/product-details/${product.id}?p_name=${
+                          product.title
+                        }&c_name=${searchParams.get("name")}&c_id=${id}`
+                      )
+                    }
+                  >
+                    <div className="card size">
+                      <img
+                        src={product.image}
+                        className="card-img-top-img"
+                        style={{ height: "50vh" }}
+                        alt="..."
+                      />
+                      <div className="card-body text-center">
+                        <div className="overflow">
+                          <p className="product-name">{product.title}</p>
+                        </div>
+                        <div className="">
+                          <span className="pe-2">₹{product.price}</span>
+                          <span className="text-secondary pe-2">
+                            <del>₹{product.price * 2}</del>
+                          </span>
+                          <span className="text-success">50% off</span>
+                        </div>
+                        <div>
+                          <p className="product-sizes">
+                            {" "}
+                            <span className="text-secondary">Size</span>{" "}
+                            <span className="product-sizes-level">
+                              M, L, XL
+                            </span>{" "}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          )}
         </div>
 
         <div

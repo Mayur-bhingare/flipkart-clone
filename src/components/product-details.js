@@ -1,7 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { saveProductDetail } from "../redux/products.slice";
+import { useDispatch } from "react-redux";
 const ProductDetails = () => {
+  let dispatch = useDispatch();
   let navigate = useNavigate();
+  let { id } = useParams();
+  let [searchParams] = useSearchParams();
+  let getProductsDetails = async () => {
+    let category_id = searchParams.get("c_id");
+    let url = `http://localhost:3004/product-details/${id}/${category_id}`;
+    let { data } = await axios.get(url);
+    dispatch(saveProductDetail(data));
+  };
+  useEffect(() => {
+    getProductsDetails();
+  });
   return (
     <>
       <section>

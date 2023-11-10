@@ -11,9 +11,9 @@ function App() {
         <section className="row">
           <Routes>
             <Route path="/" element={<Navigate to="/home-page" />} />
-            <Route path="/all-products" element={<AllProducts />} />
+            <Route path="/all-products/:id" element={<AllProducts />} />
             <Route path="/home-page" element={<Homepage />} />
-            <Route path="/product-details" element={<ProductDetails />} />
+            <Route path="/product-details/:id" element={<ProductDetails />} />
 
             <Route path="/my-cart" element={<CartPage />} />
             <Route path="*" element={<PageNotFround />} />
